@@ -39,52 +39,29 @@ ll min(ll x, ll y)        { return x < y ? x : y; }
 #define mp        make_pair
 #define ff        first
 #define ss        second
-const ll N = 5e5+10; vll a(N), prv(N), nxt(N); ll n;
-// bool _(ll i, ll j){ if(i < 0 || j > n-1) return false; return a[j] == (a[i]+1)%10 ? true : false; }
+string t; ll lt, l, r; us<char> st = {'a', 'e', 'i', 'o', 'u'};
 int32_t main(){ fast
     T{
-        auto _ = [](ll i, ll j)->bool{ if(i < 0 || j > n-1) return false; return a[j] == (a[i]+1)%10 ? true : false; };
-        string s; cin>>n>>s; f(i, 0, n) a[i] = s[i]-'0';
-        vector<bool> b(n, true); us<ll> st[10];
-        f(i, 0, n-1) if(_(i, i+1)) st[a[i]].insert(i);
-        f(i, 0, n){ prv[i] = i-1; nxt[i] = i+1; }
+        auto _ = [](ll i, ll j)->bool{ ll ct = 0; f(k, i, j) if(st.find(t[k]) != st.end()) ct++;  return ct >= 2 ? true : false; };
+        string s; cin>>s; ll ls = s.size(); bool flag = false;
         
-        while(1){
-            bool flag = false;
-            f(i, 0, 10){
-                while(st[i].size()){
+        f(i, 0, ls){
+            f(j, i, ls){
+                lt = j-i+1;
+                t = s.substr(i, lt);
 
-                    // (l, {c,) ["r",} rr] // left(l), current(c), right(r), right_right(rr)
-                    ll c = *st[i].begin(), l = prv[c], r = nxt[c], rr = nxt[r];
-                                                
-                    // deletion of right element & modification of left element of the i, (i+1)%10 pair  
-                    st[i].erase(st[i].begin()); b[r] = false;
+                if(lt&1){ l = lt/2-1; r = l+2; }
+                else{ l = lt/2-2; r = l+3; }
 
-                    if(_(l, c)){
-                        st[a[l]].erase(l);
-                    }
-
-                    if(_(r, rr)){
-                        st[a[r]].erase(r);
-                    }
-
-                    prv[rr] = c;
-                    nxt[c] = rr;
-                    
-                    a[c] += 2; a[c] %= 10;
-
-                    if(_(l, c)){
-                        st[a[l]].insert(l);
-                    }
-
-                    if(_(c, rr)){
-                        st[a[c]].insert(c);
-                    }
-                    flag = true;
+                while(r < lt){
+                    string a = t.substr(0, l+1), b = t.substr(r, l+1);
+                    if(a == b && _(r, lt)){ flag = true; break; }
+                    l--, r++;
                 }
+                if(flag) break;
             }
-            if(!flag) break;
+            if(flag) break;
         }
-        TC f(i, 0, n) if(b[i]) cout<<a[i]; cout<<"\n";
+        TC cout<<(flag ? "Spell!" : "Nothing.")<<"\n";
     }
 }

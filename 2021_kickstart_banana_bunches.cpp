@@ -10,9 +10,9 @@ ll binexp(ll a, ll b)        { ll ans = 1; while(b){ if(b&1) ans = ans*a; a = a*
 ll binmul(ll a, ll b, ll m)        { a %= m; ll ans = 0; while(b){ if(b&1) ans = (ans+a)%m; a = (a+a)%m; b >>= 1; } return ans; }
 ll binexpmod(ll a, ll b, ll m)        { a %= m; ll ans = 1; while(b){ if(b&1) ans = binmul(ans, a, m); a = binmul(a, a, m); b >>= 1; } return ans; }
 #define T        ll0(no_of_testcases) cin>>no_of_testcases; f(curr_testcase, 1, no_of_testcases+1)
+#define TC        cout<<"Case #"<<curr_testcase<<": ";
 #define fast        ios_base::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 #define info        cout<<__DATE__<<" "<<__TIME__<<"\n";
-#define TC        cout<<"Case #"<<curr_testcase<<": ";
 ll gcd(ll x, ll y)        { if(y == 0) return x; return gcd(y, x%y); }
 ll lcm(ll x, ll y)        { ll g = gcd(x, y); return (x/g)*(y/g); }
 #define f(i, m, n)        for(ll i = (ll)m; i < (ll)n; i++)
@@ -39,44 +39,25 @@ ll min(ll x, ll y)        { return x < y ? x : y; }
 #define mp        make_pair
 #define ff        first
 #define ss        second
-const ll K = 1e5+10; vll g[K], cc[K], kis_cc(K); vector<bool> vis(K, false); ll idx = 0;
-
-void dfs(ll v){
-    vis[v] = true;
-    cc[idx].pb(v);
-    kis_cc[v] = idx;
-    for(ll child:g[v]){
-        if(!vis[child]) dfs(child);
-    }
-}
-
 int32_t main(){ fast
-    ll n, k, ans = 0; cin>>n>>k; vll p(n), c(n); f(i, 0, n) cin>>p[i]; f(i, 0, n) cin>>c[i]; us<ll> st;
-    f(i, 0, k){
-        ll x, y; cin>>x>>y; g[x].pb(y); g[y].pb(x); st.insert(x); st.insert(y);
-    }
-    fa(&i, st){
-        if(!vis[i]){
-            dfs(i); idx++;
-        }
-    }
+    T{
+        ll n, k; cin>>n>>k; vll b(n), best_len(k+1, inf); best_len[0] = 0; fa(&i, b) cin>>i;
+        ll ans = inf;
 
-    f(i, 0, idx){
-        vll a, b;
-        fa(&j, cc[i]){ 
-            j--; a.pb(p[j]); b.pb(c[j]);
-            p[j] = 0; c[j] = 0;
+        f(i, 0, n){
+            ll sum  = 0;
+            f(j, i, n){
+                sum += b[j];
+                if(sum <= k)
+                ans = min(ans, j-i+1 + best_len[k-sum]);
+            }
+            sum = 0;
+            f_(j, i, 0){
+                sum += b[j];
+                if(sum <= k)
+                best_len[sum] = min(best_len[sum], i-j+1);
+            }
         }
-        ll n_ = a.size();
-        sort(all(a), [](ll x, ll y)->bool{ return x > y; });
-        sort(all(b));
-        f(i, 0, n_){
-            ans += a[i]*b[i];
-        }
+        TC cout<<(ans == inf ? -1 : ans)<<"\n";
     }
-    f(i, 0, n){
-        ans += p[i]*c[i];
-    }
-
-    cout<<ans;
 }
