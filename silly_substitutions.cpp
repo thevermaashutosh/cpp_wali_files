@@ -21,12 +21,15 @@ ll lcm(ll x, ll y)        { ll g = gcd(x, y); return x*y/g; }
 #define f(i, m, n)        for(ll i = (ll)m; i < (ll)n; i++)
 #define f_(i, n, m)        for(ll i = (ll)n; i >= (ll)m; i--)
 #define fa(i, x)        for(auto i:x)
+#define fi(i, x)        for(auto i = x.begin(); i != x.end(); i++)
 
 ll max(ll x, ll y)        { return x > y ? x : y; }
 ll min(ll x, ll y)        { return x < y ? x : y; }
 
-#define blackpink        cout<<"BLACKPINK🖤💗 is the revolution.\n";
-#define hope        cout<<"Do smth instead of nothing.\n";
+#define blackpink        " BLACKPINK is the revolution! "
+#define hope        " Do smth instead of nothing. "
+#define always_remember        " One must be an ocean to recieve a polluted stream without himself becoming impure. — Friedrich Nietzche "
+
 #define inf        (ll)LLONG_MAX-(ll)INT_MAX
 #define inf_        (ll)LLONG_MIN-(ll)INT_MIN
 #define all(x)        x.begin(), x.end()
@@ -53,30 +56,45 @@ ll min(ll x, ll y)        { return x < y ? x : y; }
 #define in        insert
 #define beg        begin
 
-const ll N = 1e5+10;
-vpll g[N]; vll lev(N, inf);
+int32_t main(){ fast // 
+    T{
+        ll n; string s; cin>>n>>s; list<pll> l; fa(&i, s){ ll j = &i-&s[0]; l.pb(mp(j, i-'0')); }
+        um<ll, list<pll>::iterator> m; fi(i, l) m[i->ff] = i;
+        vector<us<ll>> p(10);
+        fi(i, l){
+            if(i == --l.end()) continue;
+            auto c = i, n = ++c;
+            ll curr = c->ss, next = n->ss;
+            if(next == (curr+1)%10) p[curr].in(i->ff);
+        }
 
-ll bfs01(ll n){
-    deque<ll> q;
-    q.pb(1); lev[1] = 0;
+        bool change = 1;
+        while(change){
+            change = 0;
 
-    while(q.size()){
-        ll ver = q.front(); q.pof();
-        
-        fa(&i, g[ver]){
-            ll child = i.ff, wt = i.ss;
+            f(i, 0, 10){
 
-            if(lev[ver] + wt < lev[child]){ /**/
-                lev[child] = lev[ver] + wt;
-                if(wt) q.pb(child);
-                else q.pf(child);
+                fa(&idx, p[i]){
+
+                    change = 1;
+                    auto it = m[idx], itr = ++it;
+                    ll idxr = itr->ff;
+
+                    f(j, 0, 10) if(p[j].count(idxr)) p[j].erase(idxr);
+
+                    if(it != l.begin()){
+                        auto itl = --it;
+                        ll idxl = itl->ff;
+
+                        f(j, 0, 10) if(p[j].count(idxl)) p[j].erase(idxl);
+                    }
+
+                    l.erase(itr);
+                    it->ss = (it->ss+2)%10;
+
+                    
+                }
             }
         }
     }
-    return lev[n];
-}
-int32_t main(){ fast
-    ll n, m, x; cin>>n>>m;
-    f(i, 0, m){ ll x, y; cin>>x>>y; if(x != y) g[x].pb(mp(y, 0)), g[y].pb(mp(x, 1)); } x = bfs01(n);
-    cout<<(x != inf ? x : -1);
 }

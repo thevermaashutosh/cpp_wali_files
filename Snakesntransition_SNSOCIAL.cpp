@@ -25,8 +25,10 @@ ll lcm(ll x, ll y)        { ll g = gcd(x, y); return x*y/g; }
 ll max(ll x, ll y)        { return x > y ? x : y; }
 ll min(ll x, ll y)        { return x < y ? x : y; }
 
-#define blackpink        cout<<"BLACKPINK🖤💗 is the revolution.\n";
-#define hope        cout<<"Do smth instead of nothing.\n";
+#define blackpink        " BLACKPINK is the revolution! "
+#define hope        " Do smth instead of nothing. "
+#define always_remember        " One must be an ocean to recieve a polluted stream without himself becoming impure. — Friedrich Nietzche "
+
 #define inf        (ll)LLONG_MAX-(ll)INT_MAX
 #define inf_        (ll)LLONG_MIN-(ll)INT_MIN
 #define all(x)        x.begin(), x.end()
@@ -53,30 +55,38 @@ ll min(ll x, ll y)        { return x < y ? x : y; }
 #define in        insert
 #define beg        begin
 
-const ll N = 1e5+10;
-vpll g[N]; vll lev(N, inf);
+vvll g(510, vll(510)) /*grid*/, lev(510, vll(510));
+vector<vbl> vis(510, vbl(510)); ll n, m, mx, ans;
 
-ll bfs01(ll n){
-    deque<ll> q;
-    q.pb(1); lev[1] = 0;
+ll bfs(){
+    queue<pll> q; ans = 0;
+    f(i, 0, n) f(j, 0, m) if(g[i][j] == mx) q.push(mp(i, j)), lev[i][j] = 0, vis[i][j] = true;
+    vpll v1 = {{1,0},{0,1},{-1,0},{0,-1},{1,1},{1,-1},{-1,-1},{-1,1}};
 
     while(q.size()){
-        ll ver = q.front(); q.pof();
-        
-        fa(&i, g[ver]){
-            ll child = i.ff, wt = i.ss;
 
-            if(lev[ver] + wt < lev[child]){ /**/
-                lev[child] = lev[ver] + wt;
-                if(wt) q.pb(child);
-                else q.pf(child);
+        ll i = q.front().ff, j = q.front().ss;
+
+        fa(&it, v1){
+
+            ll x = i+it.ff, y = j+it.ss; bool flag = x >= 0 && y >= 0 && x < n && y < m;
+            
+            if(flag && !vis[x][y]){
+                q.push(mp(x, y));
+                vis[x][y] = true;
+                lev[x][y] = lev[i][j] + 1;
+                ans = max(ans, lev[x][y]);
             }
         }
+        q.pop();
     }
-    return lev[n];
+    return ans;
 }
-int32_t main(){ fast
-    ll n, m, x; cin>>n>>m;
-    f(i, 0, m){ ll x, y; cin>>x>>y; if(x != y) g[x].pb(mp(y, 0)), g[y].pb(mp(x, 1)); } x = bfs01(n);
-    cout<<(x != inf ? x : -1);
+int32_t main(){ fast // BLACKPINK is the revolution!
+    T{
+        cin>>n>>m; fill(all(g), vll(g[0].size(), 0)), fill(all(lev), vll(lev[0].size(), inf)), fill(all(vis), vbl(vis[0].size(), false));
+
+        mx = inf_; f(i, 0, n) f(j, 0, m) cin>>g[i][j], mx = max(mx, g[i][j]);
+        cout<<bfs()<<"\n";
+    }
 }

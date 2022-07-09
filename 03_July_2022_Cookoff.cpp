@@ -25,8 +25,10 @@ ll lcm(ll x, ll y)        { ll g = gcd(x, y); return x*y/g; }
 ll max(ll x, ll y)        { return x > y ? x : y; }
 ll min(ll x, ll y)        { return x < y ? x : y; }
 
-#define blackpink        cout<<"BLACKPINK🖤💗 is the revolution.\n";
-#define hope        cout<<"Do smth instead of nothing.\n";
+#define blackpink        " BLACKPINK is the revolution! "
+#define hope        " Do smth instead of nothing. "
+#define always_remember        " One must be an ocean to recieve a polluted stream without himself becoming impure. — Friedrich Nietzche "
+
 #define inf        (ll)LLONG_MAX-(ll)INT_MAX
 #define inf_        (ll)LLONG_MIN-(ll)INT_MIN
 #define all(x)        x.begin(), x.end()
@@ -53,30 +55,32 @@ ll min(ll x, ll y)        { return x < y ? x : y; }
 #define in        insert
 #define beg        begin
 
-const ll N = 1e5+10;
-vpll g[N]; vll lev(N, inf);
+int32_t main(){ fast // BLACKPINK is the revolution!
+    T{
+        // ll n, m, k, l = 0, r = 0, last; bool flag = 0; cin>>n>>m>>k; vll a(n); fa(&i, a){ cin>>i; if(i > k) r++; } sort(all(a)); set<ll> s1;
+        // ll curr, prev = 0;
+        // f(i, 0, n){
+        //     curr = a[i];
+        //     if(curr > prev+1) break;
+        //     l++;
+        //     s1.in(curr);
+        //     prev = curr;
+        // }
+        // last = *(--s1.end());
+        // // fa(&i, s1) cout<<i<<" "; cout<<"\n";
 
-ll bfs01(ll n){
-    deque<ll> q;
-    q.pb(1); lev[1] = 0;
+        // cout<<(flag ? "YES" : "NO")<<"\n";
 
-    while(q.size()){
-        ll ver = q.front(); q.pof();
-        
-        fa(&i, g[ver]){
-            ll child = i.ff, wt = i.ss;
-
-            if(lev[ver] + wt < lev[child]){ /**/
-                lev[child] = lev[ver] + wt;
-                if(wt) q.pb(child);
-                else q.pf(child);
-            }
+        ll n, m, k; cin>>n>>m>>k; vll a(n); fa(&i, a) cin>>i; bool flag = 0;
+        sort(all(a)); set<ll> s1;
+        for(ll i = 0, prev = 0, curr; i < n; i++){
+            curr = a[i];
+            if(i == 0 && curr != 0) break;
+            else if(curr == prev || curr == prev+1) s1.in(curr);
+            else break;
+            prev = curr;
         }
+        // fa(&i, s1) cout<<i<<" "; cout<<"\n";
+        
     }
-    return lev[n];
-}
-int32_t main(){ fast
-    ll n, m, x; cin>>n>>m;
-    f(i, 0, m){ ll x, y; cin>>x>>y; if(x != y) g[x].pb(mp(y, 0)), g[y].pb(mp(x, 1)); } x = bfs01(n);
-    cout<<(x != inf ? x : -1);
 }
